@@ -1,6 +1,8 @@
 import math
 from tkinter import ttk, Tk
 from tkextrafont import Font
+from phrase import phrase_equation
+from fraction_calc import *
 
 def resize(event):
     if str(event.widget) == '.':
@@ -13,55 +15,34 @@ def resize(event):
             size = 12
         default_font.config(size=size)
         math_font.config(size=size)
-        print(size)
-
-def simply(x, y):
-    if int(str(x/y).split('.')[1]) > 0:
-        if len(str(y).split('.')[1]) > len(str(x).split('.')[1]):
-            x, y = y, x
-
-        nx = len(str(x).split('.')[1])
-        x *= 10**nx
-        y *= 10**nx
-        gcd_xy = math.gcd(int(abs(x)), int(abs(y)))
-        return f'{int(x)//gcd_xy}/{int(y)//gcd_xy}'
-    else:
-        return float(x/y)
 
 def calc():
-    raw1 = input1.get().lower()
-    s1 = raw1.split('=')
+    a1, b1, c1 = phrase_equation(input1.get())
+    a2, b2, c2 = phrase_equation(input2.get())
 
-    a1 = float(s1[0].split('x')[0])
-    b1 = float(s1[0].split('x')[1].split('y')[0])
-    c1 = float(s1[1])
+    d = subtract(mutiply(a1, b2), mutiply(a2, b1))
+    dx = subtract(mutiply(c1, b2), mutiply(c2, b1))
+    dy = subtract(mutiply(a1, c2), mutiply(a2, c1))
 
-    raw2 = input2.get().lower()
-    s1 = raw2.split('=')
+    label_d['text'] = f'Δ = {d[0]/d[1]}'
+    label_dx['text'] = f'Δx = {dx[0]/dx[1]}'
+    label_dy['text'] = f'Δy = {dy[0]/dy[1]}'
 
-    a2 = float(s1[0].split('x')[0])
-    b2 = float(s1[0].split('x')[1].split('y')[0])
-    c2 = float(s1[1])
+    x = math.nan
+    y = math.nan
 
-    d = a1 * b2 - a2 * b1
-    dx = c1 * b2 - c2 * b1
-    dy = a1 * c2 - a2 * c1
-
-    label_d['text'] = f'Δ = {d}'
-    label_dx['text'] = f'Δx = {dx}'
-    label_dy['text'] = f'Δy = {dy}'
-
-    if d == 0:
-        label_x['text'] = 'x = nan'
-        label_y['text'] = 'y = nan'
-        if dx == 0 and dy == 0:
+    if d[0] == 0:
+        if dx[0] == 0 and dy[0] == 0:
             label_situaltion['text'] = '無限多組解'
         else:
             label_situaltion['text'] = '無解'
     else:
         label_situaltion['text'] = '洽有一組解'
-        label_x['text'] = f'x = {simply(dx, d)}'
-        label_y['text'] = f'y = {simply(dy, d)}'
+        x = simply_to_str(divide(dx, d))
+        y = simply_to_str(divide(dy, d))
+
+    label_x['text'] = f'x = {x}'
+    label_y['text'] = f'y = {y}'
 
 root = Tk()
 root.title("二元一次方程式計算機")
