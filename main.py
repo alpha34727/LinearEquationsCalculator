@@ -1,4 +1,32 @@
-import tkinter as tk
+import math
+from tkinter import ttk, Tk
+from tkextrafont import Font
+
+def resize(event):
+    if str(event.widget) == '.':
+        global default_font
+        global math_font
+        size = int(event.width*event.height/32000 + 4)
+        if size > 28:
+            size = 28
+        elif size < 12:
+            size = 12
+        default_font.config(size=size)
+        math_font.config(size=size)
+        print(size)
+
+def simply(x, y):
+    if int(str(x/y).split('.')[1]) > 0:
+        if len(str(y).split('.')[1]) > len(str(x).split('.')[1]):
+            x, y = y, x
+
+        nx = len(str(x).split('.')[1])
+        x *= 10**nx
+        y *= 10**nx
+        gcd_xy = math.gcd(int(abs(x)), int(abs(y)))
+        return f'{int(x)//gcd_xy}/{int(y)//gcd_xy}'
+    else:
+        return float(x/y)
 
 def calc():
     raw1 = input1.get().lower()
@@ -19,57 +47,57 @@ def calc():
     dx = c1 * b2 - c2 * b1
     dy = a1 * c2 - a2 * c1
 
-
-    print(a1, b1, c1)
-    print(a2, b2, c2)
-
     label_d['text'] = f'Δ = {d}'
     label_dx['text'] = f'Δx = {dx}'
     label_dy['text'] = f'Δy = {dy}'
-    print(d, dx, dy)
 
     if d == 0:
         label_x['text'] = 'x = nan'
         label_y['text'] = 'y = nan'
         if dx == 0 and dy == 0:
             label_situaltion['text'] = '無限多組解'
-            print('無限多組解')
         else:
             label_situaltion['text'] = '無解'
-            print('無解')
     else:
         label_situaltion['text'] = '洽有一組解'
-        label_x['text'] = f'x = {dx/d}'
-        label_y['text'] = f'y = {dy/d}'
-        print(f'x = {dx/d}')
-        print(f'y = {dy/d}')
+        label_x['text'] = f'x = {simply(dx, d)}'
+        label_y['text'] = f'y = {simply(dy, d)}'
 
-root = tk.Tk()
+root = Tk()
 root.title("二元一次方程式計算機")
-root.geometry("640x480")
+root.geometry(f"800x480")
+root.config(background="#FFFFFF", padx=10, pady=10)
 
+default_font = Font(file="./font/NotoSansTC-Regular.otf", family="Noto Sans TC", size=16)
+math_font = Font(file="./font/STIXTwoText-Medium.otf", family="STIX Two Text Medium", size=16)
 
+style = ttk.Style()
+style.configure("TFrame", background="#FFFFFF")
+style.configure("TLabel", background="#FFFFFF", font=default_font)
+style.configure("TButton", background="#FFFFFF", font=default_font)
+style.configure("Math.TLabel", background="#FFFFFF", font=math_font)
+style.configure("Math.TButton", background="#FFFFFF", font=math_font)
+style.configure("TEntry", background="#FFFFFF")
 
-info_frame = tk.Frame(root)
+info_frame = ttk.Frame(root, style="TFrame")
 
-graph_frame = tk.Frame(info_frame)
+graph_frame = ttk.Frame(info_frame, style="TFrame")
 graph_frame.place(relwidth=0.8, relheight=1)
 
-answer_frame = tk.Frame(info_frame)
+answer_frame = ttk.Frame(info_frame, style="TFrame")
 
-label_d = tk.Label(answer_frame, font=('Cambria', 16))
+label_d = ttk.Label(answer_frame, style="Math.TLabel")
 label_d.pack(anchor='w')
-label_dx = tk.Label(answer_frame, font=('Cambria', 16))
+label_dx = ttk.Label(answer_frame, style="Math.TLabel")
 label_dx.pack(anchor='w')
-label_dy = tk.Label(answer_frame, font=('Cambria', 16))
+label_dy = ttk.Label(answer_frame, style="Math.TLabel")
 label_dy.pack(anchor='w')
-label_situaltion = tk.Label(answer_frame, font=('Cambria', 16))
+label_situaltion = ttk.Label(answer_frame, style="TLabel")
 label_situaltion.pack(anchor='w')
-label_x = tk.Label(answer_frame, font=('Cambria', 16))
+label_x = ttk.Label(answer_frame, style="Math.TLabel")
 label_x.pack(anchor='w')
-label_y = tk.Label(answer_frame, font=('Cambria', 16))
+label_y = ttk.Label(answer_frame, style="Math.TLabel")
 label_y.pack(anchor='w')
-
 
 answer_frame.place(relwidth=0.2, relheight=1, relx=0.8)
 
@@ -77,33 +105,34 @@ info_frame.place(relwidth=1, relheight=0.8)
 
 
 
-input_frame1 = tk.Frame(root)
+input_frame1 = ttk.Frame(root, style="TFrame")
 
-label1 = tk.Label(input_frame1, text="方程式1", font=('微軟正黑體', 16))
-label1.grid(row=0, column=0)
-input1 = tk.Entry(input_frame1, font=('Cambria', 16))
-input1.grid(row=0, column=1)
+label1 = ttk.Label(input_frame1, text="方程式1", style="TLabel")
+label1.pack(anchor='w', side='left')
+input1 = ttk.Entry(input_frame1, style="TEntry", font=math_font)
+input1.pack(anchor='w', side='left', padx=10, fill='both', expand=1)
 
-input_frame1.place(relwidth=0.8, relheight=0.1, rely=0.8)
-
-
-
-
-input_frame2 = tk.Frame(root)
-
-label2 = tk.Label(input_frame2, text="方程式2", font=('微軟正黑體', 16))
-label2.grid(row=0, column=0)
-input2 = tk.Entry(input_frame2, font=('Cambria', 16))
-input2.grid(row=0, column=1)
-
-input_frame2.place(relwidth=0.8, relheight=0.1, rely=0.9)
+input_frame1.place(anchor='w', relwidth=0.8, relheight=0.09, rely=0.85)
 
 
 
 
-calc_btn = tk.Button(root, text="計算",command=calc, font=('微軟正黑體', 16))
+input_frame2 = ttk.Frame(root, style="TFrame")
+
+label2 = ttk.Label(input_frame2, text="方程式2", style="TLabel")
+label2.pack(anchor='w', side='left')
+input2 = ttk.Entry(input_frame2, style="TEntry", font=math_font)
+input2.pack(anchor='w', side='left', padx=10, fill='both', expand=1)
+
+input_frame2.place(anchor='w', relwidth=0.8, relheight=0.09, rely=0.95)
+
+
+
+
+calc_btn = ttk.Button(root, text="計算",command=calc, style="TButton")
 calc_btn.place(relwidth=0.2, relheight=0.2, relx=0.8, rely=0.8)
 
+root.bind('<Configure>', resize)
 root.mainloop()
 
 
