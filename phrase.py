@@ -21,6 +21,8 @@ def phrase_equation(equation):
         result = []
         for i in arr:
             i = list(i)
+            if i[0] == '':
+                i[0] = '1.0'
             if i[1] == '':
                 i[1] = '1.0'
             if '.' not in i[0]:

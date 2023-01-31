@@ -72,3 +72,20 @@ def simply_to_str(arr):
         return f'{a//gcd_ab}/{b//gcd_ab}'
     else:
         return str(int(a/b))
+
+def simply_to_numerical(arr):
+    a, b = arr[0], arr[1]
+    if b == 0:
+        return math.nan
+    if b < 0:
+        if a < 0:
+            a = -a
+            b = -b
+        else:
+            a = -a
+            b = b
+    if int(str(a/b).split('.')[1]) > 0:
+        gcd_ab = math.gcd(int(abs(a)), int(abs(b)))
+        return a//gcd_ab / b//gcd_ab
+    else:
+        return int(a/b)
