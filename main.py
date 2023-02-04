@@ -6,9 +6,8 @@ from tkextrafont import Font
 from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 from matplotlib.backend_bases import key_press_handler
 from matplotlib.figure import Figure
+from matplotlib.pyplot import MultipleLocator
 from matplotlib.backend_bases import _Mode
-
-import numpy as np
 
 from phrase import phrase_equation
 from fraction_calc import *
@@ -92,15 +91,17 @@ def calc():
     dx = subtract(mutiply(c1, b2), mutiply(c2, b1))
     dy = subtract(mutiply(a1, c2), mutiply(a2, c1))
 
-    label_d['text'] = f'Δ = {d[0]/d[1]}'
-    label_dx['text'] = f'Δx = {dx[0]/dx[1]}'
-    label_dy['text'] = f'Δy = {dy[0]/dy[1]}'
+    label_d['text'] = f'Δ = {simply_to_str(d)}'
+    label_dx['text'] = f'Δx = {simply_to_str(dx)}'
+    label_dy['text'] = f'Δy = {simply_to_str(dy)}'
 
     line.axhline(y=0, color="#000000")
     line.axvline(x=0, color="#000000")
 
     x = math.nan
     y = math.nan
+    x_str = ""
+    y_str = ""
 
     if d[0] == 0:
         if dx[0] == 0 and dy[0] == 0:
@@ -113,20 +114,25 @@ def calc():
         line.grid(which='major')
     else:
         label_situaltion['text'] = '洽有一組解'
-        x = simply_to_str(divide(dx, d))
-        y = simply_to_str(divide(dy, d))
-        print((simply_to_numerical(divide(dx, d))+1, simply_to_numerical(divide(subtract(c1, mutiply(a1, add(divide(dx, d), [1, 1]))), b1))))
-        print((simply_to_numerical(divide(dx, d))-1, simply_to_numerical(divide(subtract(c2, mutiply(a2, add(divide(dx, d), [-1, 1]))), b2))))
-        line.axline((simply_to_numerical(divide(dx, d)), simply_to_numerical(divide(dy, d))), (simply_to_numerical(divide(dx, d))+1, simply_to_numerical(divide(subtract(c1, mutiply(a1, add(divide(dx, d), [1, 1]))), b1))), color="#4fc3f7", label=input1.get())
-        line.axline((simply_to_numerical(divide(dx, d)), simply_to_numerical(divide(dy, d))), (simply_to_numerical(divide(dx, d))+1, simply_to_numerical(divide(subtract(c2, mutiply(a2, add(divide(dx, d), [1, 1]))), b2))), color="#ffb74d", label=input2.get())
+        x = divide(dx, d)
+        y = divide(dy, d)
+        x_str = simply_to_str(x)
+        y_str = simply_to_str(y)
+        line.axline((0, simply_to_numerical(divide(c1, b1))), (simply_to_numerical(divide(c1, a1)), 0), color="#4fc3f7", label=input1.get())
+        line.axline((0, simply_to_numerical(divide(c2, b2))), (simply_to_numerical(divide(c2, a2)), 0), color="#ffb74d", label=input2.get())
+        # line.axline((simply_to_numerical(divide(dx, d)), simply_to_numerical(divide(dy, d))), (simply_to_numerical(divide(dx, d))+1, simply_to_numerical(divide(subtract(c1, mutiply(a1, add(divide(dx, d), [1, 1]))), b1))), color="#4fc3f7", label=input1.get())
+        # line.axline((simply_to_numerical(divide(dx, d)), simply_to_numerical(divide(dy, d))), (simply_to_numerical(divide(dx, d))+1, simply_to_numerical(divide(subtract(c2, mutiply(a2, add(divide(dx, d), [1, 1]))), b2))), color="#ffb74d", label=input2.get())
         line.grid(which='major')
+        # print(simply_to_numerical(divide(dx, d)), simply_to_numerical(divide(dy, d)))
         line.plot(simply_to_numerical(divide(dx, d)), simply_to_numerical(divide(dy, d)), 'o', color="#ef5350")
     
-    label_x['text'] = f'x = {x}'
-    label_y['text'] = f'y = {y}'
+    label_x['text'] = f'x = {x_str}'
+    label_y['text'] = f'y = {y_str}'
     labels = [input1.get(), input2.get()]
     handles, _ = line.get_legend_handles_labels()
     line.legend(handles = handles, labels = labels, loc='upper right')
+    line.xaxis.set_major_locator(MultipleLocator(1))
+    line.yaxis.set_major_locator(MultipleLocator(1))
     
     canvas.draw()
 
