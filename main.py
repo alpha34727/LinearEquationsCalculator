@@ -120,10 +120,7 @@ def calc():
         y_str = simply_to_str(y)
         line.axline((0, simply_to_numerical(divide(c1, b1))), (simply_to_numerical(divide(c1, a1)), 0), color="#4fc3f7", label=input1.get())
         line.axline((0, simply_to_numerical(divide(c2, b2))), (simply_to_numerical(divide(c2, a2)), 0), color="#ffb74d", label=input2.get())
-        # line.axline((simply_to_numerical(divide(dx, d)), simply_to_numerical(divide(dy, d))), (simply_to_numerical(divide(dx, d))+1, simply_to_numerical(divide(subtract(c1, mutiply(a1, add(divide(dx, d), [1, 1]))), b1))), color="#4fc3f7", label=input1.get())
-        # line.axline((simply_to_numerical(divide(dx, d)), simply_to_numerical(divide(dy, d))), (simply_to_numerical(divide(dx, d))+1, simply_to_numerical(divide(subtract(c2, mutiply(a2, add(divide(dx, d), [1, 1]))), b2))), color="#ffb74d", label=input2.get())
         line.grid(which='major')
-        # print(simply_to_numerical(divide(dx, d)), simply_to_numerical(divide(dy, d)))
         line.plot(simply_to_numerical(divide(dx, d)), simply_to_numerical(divide(dy, d)), 'o', color="#ef5350")
     
     label_x['text'] = f'x = {x_str}'

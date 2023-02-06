@@ -46,12 +46,8 @@ def simply(arr):
     if int(str(a/b).split('.')[1]) > 0:
         gcd_ab = math.gcd(int(abs(a)), int(abs(b)))
         if b < 0:
-            if a < 0:
-                a = -a
-                b = -b
-            else:
-                a = -a
-                b = b
+            a = -a
+            b = -b
         return [a//gcd_ab, b//gcd_ab]
     else:
         return [int(a/b), 1]
@@ -61,12 +57,8 @@ def simply_to_str(arr):
     if b == 0:
         return str(math.nan)
     if b < 0:
-        if a < 0:
-            a = -a
-            b = -b
-        else:
-            a = -a
-            b = b
+        a = -a
+        b = -b
     if int(str(a/b).split('.')[1]) > 0:
         gcd_ab = math.gcd(int(abs(a)), int(abs(b)))
         return f'{a//gcd_ab}/{b//gcd_ab}'

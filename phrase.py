@@ -30,12 +30,8 @@ def phrase_equation(equation):
             if '.' not in i[1]:
                 i[1]+='.0'
             if i[1].startswith('-'):
-                if i[0].startswith('-'):
-                    i[0] = i[0].split('-')[1]
-                    i[1] = i[1].split('-')[1]
-                else:
-                    i[0] = '-' + i[0]
-                    i[1] = i[1].split('-')[1]
+                i[0] = i[0].split('-')[1]
+                i[1] = i[1].split('-')[1]
             float_point = max(len(i[0].split('.')[1]), len(i[1].split('.')[1]))
             i[0] = int(Decimal(i[0]) * (10**float_point))
             i[1] = int(Decimal(i[1]) * (10**float_point))
